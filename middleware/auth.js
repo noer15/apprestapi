@@ -5,8 +5,6 @@ const response = require("../res");
 const jwt = require("jsonwebtoken");
 const config = require("../config/secret");
 const ip = require("ip");
-const { query } = require("../db/koneksi");
-const conn = require("../db/koneksi");
 
 // controller untuk register
 exports.registrasi = function (req, res) {
@@ -18,8 +16,8 @@ exports.registrasi = function (req, res) {
     tanggal_daftar: new Date(),
   };
 
-  const check = "SELECT email FROM ?? WHERE ??";
-  const table = ["user", "email", post.email];
+  var check = "SELECT email FROM ?? WHERE ??=?";
+  var table = ["user", "email", post.email];
 
   query = mysql.format(check, table);
   connection.query(query, function (err, result) {
@@ -27,10 +25,10 @@ exports.registrasi = function (req, res) {
       console.log(err);
     } else {
       if (result.length == 0) {
-        const query = "INSERT INTO ?? SET ??";
-        const table = ["user"];
+        var query = "INSERT INTO ?? SET ?";
+        var table = ["user"];
         query = mysql.format(query, table);
-        connection.query(query, function (error, result) {
+        connection.query(query, post, function (error, result) {
           if (error) {
             console.log(error);
           } else {
@@ -38,7 +36,7 @@ exports.registrasi = function (req, res) {
           }
         });
       } else {
-        response.ok("email sudah terdaftar");
+        response.ok("email sudah terdaftar !!", res);
       }
     }
   });
