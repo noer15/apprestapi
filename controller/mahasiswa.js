@@ -79,3 +79,16 @@ exports.deleteMahasiswa = function (req, res) {
     }
   );
 };
+
+exports.tampilgroupmatakuliah = function (req, res) {
+  connection.query(
+    "SELECT mahasiswa.id,  mahasiswa.nim,  mahasiswa.nama, mahasiswa.jurusan, krs.tgl_krs,  matakuliah.matakuliah,  matakuliah.sks FROM mahasiswa INNER JOIN krs ON mahasiswa.id = krs.id_mahasiswa INNER JOIN matakuliah ON krs.id_matakuliah = matakuliah.id_matakuliah ORDER BY mahasiswa.id",
+    function (error, rows, fields) {
+      if (error) {
+        console.log(error);
+      } else {
+        response.oknested(rows, res);
+      }
+    }
+  );
+};
